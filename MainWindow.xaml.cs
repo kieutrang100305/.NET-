@@ -162,7 +162,21 @@ namespace PhamKieuTrang_2023602849_LuyenTapV2
             {
                 selcted.MaCN = txtMa.Text.Trim();
                 selcted.HoTen = txtHoTen.Text.Trim();
-                selcted.NgaySinh = dpNgaySinh.Text.Trim();
+                //selcted.NgaySinh = dpNgaySinh.Text.Trim();
+                if (dpNgaySinh.SelectedDate.HasValue)
+                {
+                    DateTime dt = dpNgaySinh.SelectedDate.Value;
+                    if (dt > DateTime.Now)
+                    {
+                        errNgaySinh.Content = "Ngày sinh không được lớn hơn ngày hiện tại";
+                        return;
+                    }
+                    else
+                    {
+                        errNgaySinh.Content = "";
+                        selcted.NgaySinh = dt.ToString("dd/MM/yyyy"); 
+                    }
+                }
                 selcted.GioiTinh = rbNam.IsChecked == true ? "Nam" : "Nữ";
                 selcted.Luong = luong;
                 dg.Items.Refresh();
@@ -177,7 +191,6 @@ namespace PhamKieuTrang_2023602849_LuyenTapV2
             //if (ch==MessageBoxResult.Yes)
             //{
             //    congnhans.Remove(selcted);
-            //    clear();               
             //}
             string maNhap = txtMa.Text.Trim();
             var cn = congnhans.FirstOrDefault(x => x.MaCN == maNhap);
