@@ -193,22 +193,43 @@ namespace PhamKieuTrang_2023602849_LuyenTapV2
             //    congnhans.Remove(selcted);
             //}
             string maNhap = txtMa.Text.Trim();
-            var cn = congnhans.FirstOrDefault(x => x.MaCN == maNhap);
 
-            if (cn == null)
+            if (!string.IsNullOrEmpty(maNhap))
             {
-                MessageBox.Show($"Không tìm thấy công nhân có mã: {maNhap}", "Thông báo");
-                return;
+                var cn = congnhans.FirstOrDefault(x => x.MaCN == maNhap);
+
+                if (cn != null)
+                {
+                    var ch = MessageBox.Show(
+                        $"Bạn có chắc muốn xóa công nhân có mã {maNhap} không?",
+                        "Xác nhận xóa",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question
+                    );
+
+                    if (ch == MessageBoxResult.Yes)
+                    {
+                        congnhans.Remove(cn);
+                        txtMa.Clear();
+                        txtHoTen.Clear();
+                        dpNgaySinh.SelectedDate = null;
+                        rbNam.IsChecked = false;
+                        rbNu.IsChecked = false;
+                        txtLuong.Clear();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy công nhân có mã này!", "Thông báo",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập mã công nhân để xóa!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
-            var ch = MessageBox.Show("Bạn có chắc chắn muốn xóa không?", "Thông báo",
-                                     MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (ch == MessageBoxResult.Yes)
-            {
-                congnhans.Remove(cn);
-                clear();
-            }
         }
 
         private void Button_Close(object sender, RoutedEventArgs e)
